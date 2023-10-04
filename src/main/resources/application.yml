@@ -8,8 +8,8 @@ management:
 logging:
   level:
     com.yoon.projectboard: debug
-    org.springframework.web.servlet: debug    #request, response? log? ?? ???
-    org.hibernate.type.descriptor.sql.BasicBinder: trace    #query ? ?? ???? ????? ?? ???  
+    org.springframework.web.servlet: debug    #request, response 만 log로 찍기 위해서
+    org.hibernate.type.descriptor.sql.BasicBinder: trace    #query 를 바인딩 파라미터를 보기 위해서
 
 spring:
   datasource:
@@ -18,14 +18,14 @@ spring:
     password: board
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    defer-datasource-initialization: true   #?? ???? ?? sql ?? (data.sql) - ?? ??? ???
+    defer-datasource-initialization: true   #초기 데이터 생성 sql 실행 (data.sql)
     hibernate:
       ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-        default_batch_fetch_size: 100       #? ?? ??? 100? select ?? ??. -> n+1 ?? ?? ??
+        default_batch_fetch_size: 100       #벌크 사이즈 100개 한번에 select, 조회 성능 개선 -> n+1 쿼리 문제 해결
   h2:
     console:
       enabled: false
