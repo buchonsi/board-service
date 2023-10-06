@@ -42,11 +42,13 @@ spring:
 #spring:
 #  config:
 #    activate:
-#      on-profile: testdb
+#      on-profile: testdb                 #@ActiveProfiles로 설정 시 설정파일
 #  datasource:
-#    url: jdbc:h2:mem:board;mode=mysql
+#    url: jdbc:h2:mem:board;mode=mysql    #H2의 호환성 모드 : mysql과 가까운 환경에서 테스트 할 때
 #    driver-class-name: org.h2.Driver
 #  sql:
 #    init:
 #      mode: always
-#  test.database.replace: none
+#  test.database.replace: none          #@DataJapTest를 동작할 떄 자동으로 test DB를 설정하는데 그 때 원하는 DB를 지정하려면
+                                        #@AutoConfigureTestDatabases(replace = AutoConfigureTestDatabase.Replace.NONE) 지정을 해야한다.
+                                        #하지만 테스트 클래스마다 설정하기 번거로울 때는 설정파일에 test.database.replace: none을 설정해주면 된다.
