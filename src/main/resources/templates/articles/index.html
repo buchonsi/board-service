@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 서비스</title>
+</head>
+<body>
+  <header>
+    header 삽입부
+    <hr>
+  </header>
+
+  <main>
+    <form>
+      <label for = "search-type" hidden="hidden">유형</label>
+      <select id = "search-type" name="search-type">
+        <option>제목</option>
+        <option>본문</option>
+        <option>ID</option>
+        <option>닉네임</option>
+        <option>해시태그</option>
+      </select>
+      <label for="search-value" hidden="hidden">검색</label>
+      <input id="search-value" type="search" placeholder="검색어를 입력하세요" name="search-value">
+      <button type="submit">검색</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>제목</th>
+          <th>해시태그</th>
+          <th>작성자</th>
+          <th>작성일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>첫글</td>
+          <td>자바</td>
+          <td>Yoon</td>
+          <td>2023-10-10</td>
+        </tr>
+        <tr>
+          <td>두번쨰</td>
+          <td>스프링</td>
+          <td>Yoon</td>
+          <td>2023-11-10</td>
+        </tr>
+        <tr>
+          <td>세번쨰</td>
+          <td>자바</td>
+          <td>Yoon</td>
+          <td>2023-02-10</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <nav>
+      <table>
+        <tr>
+          <td>previous</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>4</td>
+          <td>5</td>
+          <td>next</td>
+        </tr>
+      </table>
+    </nav>
+  </main>
+
+  <footer>
+    <hr>
+    footer 삽입부
+  </footer>
+
+</body>
+</html>
