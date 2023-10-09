@@ -1,3 +1,7 @@
+-- 테스트 계정
+-- todo : 테스트 용이지만 노출된 비밀번호 -> 개선 필요
+insert into user_account (user_id, user_password, email, nickname, memo, created_at, created_by, modified_at, modified_by) values ('yoon', 'yoon123', 'yoon@naver.com', 'yoon', 'yoon''s memo', now(), 'yoon', now(), 'yoon');
+
 -- 123개 게시글
 insert into article (title, content, hashtag, created_by, modified_by, created_at, modified_at) values ('Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.', 'Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.', 'Khaki', 'Mickie', 'Marmaduke', '2023-04-08 13:07:45', '2021-11-30 13:30:27');
 insert into article (title, content, hashtag, created_by, modified_by, created_at, modified_at) values ('Sed ante.', 'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.', 'Mauv', 'Kirk', 'Donnie', '2023-04-24 19:03:22', '2021-12-04 03:46:40');
