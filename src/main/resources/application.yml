@@ -26,6 +26,7 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100       #벌크 사이즈 100개 한번에 select, 조회 성능 개선 -> n+1 쿼리 문제 해결
+    open-in-view: false
   h2:
     console:
       enabled: false
