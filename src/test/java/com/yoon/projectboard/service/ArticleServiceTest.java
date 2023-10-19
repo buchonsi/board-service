@@ -4,7 +4,7 @@ import com.yoon.projectboard.domain.Article;
 import com.yoon.projectboard.domain.UserAccount;
 import com.yoon.projectboard.domain.type.SearchType;
 import com.yoon.projectboard.dto.ArticleDto;
-import com.yoon.projectboard.dto.ArticleWithCommentDto;
+import com.yoon.projectboard.dto.ArticleWithCommentsDto;
 import com.yoon.projectboard.dto.UserAccountDto;
 import com.yoon.projectboard.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -57,14 +57,14 @@ class ArticleServiceTest {
         SearchType searchType = SearchType.TITLE;
         String keyword = "title";
         Pageable pageable = Pageable.ofSize(20);
-        given(articleRepository.findByTitle(keyword, pageable)).willReturn(Page.empty());
+        given(articleRepository.findByTitleContaining(keyword, pageable)).willReturn(Page.empty());
 
         //when
         Page<ArticleDto> articles = sut.searchArticles(searchType, keyword, pageable);
 
         //then
         assertThat(articles).isEmpty();
-        then(articleRepository).should().findByTitle(keyword, pageable);
+        then(articleRepository).should().findByTitleContaining(keyword, pageable);
     }
 
     @DisplayName("게시글을 조회하면, 게시글을 반환한다.")
@@ -76,10 +76,10 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
 
         //when
-        ArticleWithCommentDto articleWithCommentDto = sut.getArticle(articleId);
+        ArticleWithCommentsDto articleWithCommentsDto = sut.getArticle(articleId);
 
         //then
-        assertThat(articleWithCommentDto)
+        assertThat(articleWithCommentsDto)
                 .hasFieldOrPropertyWithValue("title", article.getTitle())
                 .hasFieldOrPropertyWithValue("content", article.getContent())
                 .hasFieldOrPropertyWithValue("hashtag", article.getHashtag());
@@ -124,7 +124,7 @@ class ArticleServiceTest {
         //given
         Article article = createArticle();
         ArticleDto articleDto = createArticleDto("new title", "new content", "#SpringBoot");
-        given(articleRepository.save(any(Article.class))).willReturn(article);
+        given(articleRepository.getReferenceById(articleDto.id())).willReturn(article);
 
         //when
         sut.updateArticle(articleDto);
