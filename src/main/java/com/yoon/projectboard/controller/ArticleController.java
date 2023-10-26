@@ -39,6 +39,7 @@ public class ArticleController {
 
         modelMap.addAttribute("articles", articles);
         modelMap.addAttribute("paginationBarNumbers", barNumbers);
+        modelMap.addAttribute("searchTypes", SearchType.values());
 
         return "articles/index";
     }
