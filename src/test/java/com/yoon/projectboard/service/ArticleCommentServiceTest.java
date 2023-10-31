@@ -7,6 +7,7 @@ import com.yoon.projectboard.dto.ArticleCommentDto;
 import com.yoon.projectboard.dto.UserAccountDto;
 import com.yoon.projectboard.repository.ArticleCommentRepository;
 import com.yoon.projectboard.repository.ArticleRepository;
+import com.yoon.projectboard.repository.UserAccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,8 @@ class ArticleCommentServiceTest {
     private ArticleRepository articleRepository;
     @Mock
     private ArticleCommentRepository articleCommentRepository;
+    @Mock
+    private UserAccountRepository userAccountRepository;
 
     @DisplayName("게시글 ID로 조회하면, 해당하는 댓글 리스트를 반환한다.")
     @Test
@@ -57,6 +60,7 @@ class ArticleCommentServiceTest {
         //given
         ArticleCommentDto articleCommentDto = createArticleCommentDto("댓글");
         given(articleRepository.getReferenceById(articleCommentDto.articleId())).willReturn(createArticle());
+        given(userAccountRepository.getReferenceById(articleCommentDto.userAccountDto().userId())).willReturn(createUserAccount());
         given(articleCommentRepository.save(any(ArticleComment.class))).willReturn(null);
 
         //when
@@ -64,6 +68,7 @@ class ArticleCommentServiceTest {
 
         //then
         then(articleRepository).should().getReferenceById(articleCommentDto.articleId());
+        then(userAccountRepository).should().getReferenceById(articleCommentDto.userAccountDto().userId());
         then(articleCommentRepository).should().save(any(ArticleComment.class));
     }
 
@@ -79,6 +84,7 @@ class ArticleCommentServiceTest {
 
         //then
         then(articleRepository).should().getReferenceById(articleCommentDto.articleId());
+        then(userAccountRepository).shouldHaveNoInteractions();
         then(articleCommentRepository).shouldHaveNoInteractions();
     }
 
