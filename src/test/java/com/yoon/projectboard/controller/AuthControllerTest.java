@@ -1,6 +1,6 @@
 package com.yoon.projectboard.controller;
 
-import com.yoon.projectboard.config.SecurityConfig;
+import com.yoon.projectboard.config.TestSecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("View 컨트롤러 - 인증 부분")
-@Import(SecurityConfig.class)
-@WebMvcTest(Void.class)
+@Import(TestSecurityConfig.class)
+@WebMvcTest(void.class)
 public class AuthControllerTest {
 
     private final MockMvc mockMvc;
