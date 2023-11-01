@@ -1,6 +1,6 @@
 package com.yoon.projectboard.controller;
 
-import com.yoon.projectboard.config.SecurityConfig;
+import com.yoon.projectboard.config.TestSecurityConfig;
 import com.yoon.projectboard.domain.constant.FormStatus;
 import com.yoon.projectboard.domain.constant.SearchType;
 import com.yoon.projectboard.dto.ArticleDto;
@@ -23,6 +23,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -37,7 +41,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("뷰 컨트롤러 - 게시글")
-@Import({SecurityConfig.class, FormDataEncoder.class})
+@Import({TestSecurityConfig.class, FormDataEncoder.class})
 @WebMvcTest(ArticleController.class)
 class ArticleControllerTest {
 
@@ -111,7 +115,7 @@ class ArticleControllerTest {
         given(articleService.searchArticles(null, null, pageable)).willReturn(Page.empty());
         given(paginationService.getPaginationBarNumbers(pageable.getPageNumber(), Page.empty().getTotalPages())).willReturn(barNumbers);
 
-        //when
+        //when & then
         mockMvc.perform(
                         get("/articles")
                                 .queryParam("page", String.valueOf(pageNumber))
@@ -126,11 +130,23 @@ class ArticleControllerTest {
                 .andExpect(model().attribute("paginationBarNumbers", barNumbers));
         then(articleService).should().searchArticles(null, null, pageable);
         then(paginationService).should().getPaginationBarNumbers(pageable.getPageNumber(), Page.empty().getTotalPages());
-        //then
-
     }
 
-    @DisplayName("[view] [GET] 게시글 페이지 - 정상 호출")
+    @DisplayName("[view] [GET] 게시글 페이지 - 인증 없을 땐 로그인 페이지로 이동")
+    @Test
+    void givenNothing_whenRequestingArticleView_thenRedirectsToLoginView() throws Exception {
+        //given
+        long articleId = 1L;
+
+        //when & then
+        mockMvc.perform(get("/articles/" + articleId))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/login"));
+        then(articleService).shouldHaveNoInteractions();
+    }
+
+    @WithMockUser
+    @DisplayName("[view] [GET] 게시글 페이지 - 정상 호출, 인증된 사용자")
     @Test
     void givenNoting_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
         //given
@@ -211,7 +227,8 @@ class ArticleControllerTest {
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
         then(articleService).should().getHashtag();
     }
-    
+
+    @WithMockUser
     @DisplayName("[view] [GET] 새 개시글 작성 페이지")
     @Test
     void givenNothing_whenRequesting_thenReturnsNewArticleView() throws Exception {
@@ -224,6 +241,7 @@ class ArticleControllerTest {
                 .andExpect(model().attribute("formStatus", FormStatus.CREATE));
     }
 
+    @WithUserDetails(value = "yoonSecurity", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("[view] [POST] 새 게시글 등록 - 정상 호출")
     @Test
     void givenNewArticleInfo_whenRequesting_thenSavesNewArticle() throws Exception {
@@ -244,6 +262,20 @@ class ArticleControllerTest {
         then(articleService).should().saveArticle(any(ArticleDto.class));
     }
 
+    @DisplayName("[view] [GET] 게시글 수정 페이지 - 인증 없을 땐 로그인 페이지로 이동")
+    @Test
+    void givenNothing_whenRequesting_thenRedirectsToLoginView() throws Exception {
+        //given
+        long articleId = 1L;
+
+        //when & then
+        mockMvc.perform(get("/articles/" + articleId + "/form"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/login"));
+        then(articleService).shouldHaveNoInteractions();
+    }
+
+    @WithMockUser
     @DisplayName("[view] [GET] 게시글 수정 페이지")
     @Test
     void givenNothing_whenRequesting_thenReturnsUpdatedArticleView() throws Exception {
@@ -262,6 +294,7 @@ class ArticleControllerTest {
         then(articleService).should().getArticle(articleId);
     }
 
+    @WithUserDetails(value = "yoonSecurity", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("[view] [POST] 게시글 수정 - 정상 호출")
     @Test
     void givenUpdatedArticleInfo_whenRequesting_thenUpdatesNewArticle() throws Exception {
@@ -283,12 +316,14 @@ class ArticleControllerTest {
         then(articleService).should().updateArticle(eq(articleId), any(ArticleDto.class));
     }
 
-    @DisplayName("게시글 삭제 - 정상 호출")
+    @WithUserDetails(value = "yoonSecurity", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("[view] [POST] 게시글 삭제 - 정상 호출")
     @Test
     void givenArticleIdToDelete_whenRequesting_thenDeletesArticle() throws Exception {
         //given
         long articleId = 1L;
-        willDoNothing().given(articleService).deleteArticle(articleId);
+        String userId = "yoonSecurity";
+        willDoNothing().given(articleService).deleteArticle(articleId, userId);
 
         //when & then
         mockMvc.perform(
@@ -299,7 +334,7 @@ class ArticleControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/articles"))
                 .andExpect(redirectedUrl("/articles"));
-        then(articleService).should().deleteArticle(articleId);
+        then(articleService).should().deleteArticle(articleId, userId);
     }
 
     private ArticleDto createArticleDto() {
