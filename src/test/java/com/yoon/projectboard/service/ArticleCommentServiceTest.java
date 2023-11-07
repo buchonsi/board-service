@@ -2,6 +2,7 @@ package com.yoon.projectboard.service;
 
 import com.yoon.projectboard.domain.Article;
 import com.yoon.projectboard.domain.ArticleComment;
+import com.yoon.projectboard.domain.Hashtag;
 import com.yoon.projectboard.domain.UserAccount;
 import com.yoon.projectboard.dto.ArticleCommentDto;
 import com.yoon.projectboard.dto.UserAccountDto;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -156,7 +158,7 @@ class ArticleCommentServiceTest {
                 "password",
                 "yoontest@naver.com",
                 "yoon",
-                "yoon\'s memo",
+                "yoon's memo",
                 LocalDateTime.now(),
                 "yoon",
                 LocalDateTime.now(),
@@ -166,7 +168,7 @@ class ArticleCommentServiceTest {
 
     private ArticleComment createArticleComment(String content) {
         return ArticleComment.of(
-                Article.of(createUserAccount(), "title", "article_content", "#java"),
+                Article.of(createUserAccount(), "title", "article_content"),
                 createUserAccount(),
                 content
         );
@@ -183,11 +185,17 @@ class ArticleCommentServiceTest {
     }
 
     private Article createArticle() {
-        return Article.of(
+        Article article = Article.of(
                 createUserAccount(),
                 "title",
-                "article_content",
-                "#java"
+                "article_content"
         );
+        article.addHashtags(Set.of(createHashtag(article)));
+
+        return article;
+    }
+
+    private Hashtag createHashtag(Article article) {
+        return Hashtag.of("java");
     }
 }
