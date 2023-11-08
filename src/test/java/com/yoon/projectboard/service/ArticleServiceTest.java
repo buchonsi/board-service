@@ -170,7 +170,6 @@ class ArticleServiceTest {
         then(articleRepository).should().findById(articleId);
     }
 
-
     @DisplayName("게시글을 조회하면, 게시글을 반환한다.")
     @Test
     void givenArticleId_whenSearchingArticle_thenReturnsArticle() {
@@ -326,7 +325,7 @@ class ArticleServiceTest {
         then(articleRepository).should().getReferenceById(articleId);
         then(articleRepository).should().deleteByIdAndUserAccount_UserId(articleId, userId);
         then(articleRepository).should().flush();
-        then(hashtagService).should().deleteHashtagWithoutArticles(any());
+        then(hashtagService).should(times(2)).deleteHashtagWithoutArticles(any());
     }
 
     @DisplayName("게시글 수를 조회하면, 게시글 수를 반환한다.")
