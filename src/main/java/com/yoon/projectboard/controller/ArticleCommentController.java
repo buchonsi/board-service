@@ -1,6 +1,5 @@
 package com.yoon.projectboard.controller;
 
-import com.yoon.projectboard.dto.UserAccountDto;
 import com.yoon.projectboard.dto.request.ArticleCommentRequest;
 import com.yoon.projectboard.dto.security.BoardPrincipal;
 import com.yoon.projectboard.service.ArticleCommentService;
