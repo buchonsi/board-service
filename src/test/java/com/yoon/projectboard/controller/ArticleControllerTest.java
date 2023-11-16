@@ -169,7 +169,7 @@ class ArticleControllerTest {
         then(articleService).should().getArticleCount();
     }
 
-    @Disabled("구현 중")
+    @Disabled("구현 삭제")
     @DisplayName("[view] [GET] 게시글 검색 전용 페이지 - 정상 호출")
     @Test
     void givenNoting_whenRequestingArticleSearchView_thenReturnsArticleSearchView() throws Exception {
