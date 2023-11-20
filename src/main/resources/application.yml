@@ -61,12 +61,12 @@ spring:
 
 ---
 
-#spring:
-#  config:
-#    activate:
-#      on-profile: testdb                 #@ActiveProfiles로 설정 시 설정파일
-#  datasource:
-#    url: jdbc:h2:mem:board;mode=mysql    #H2의 호환성 모드 : mysql과 가까운 환경에서 테스트 할 때
+spring:
+  config:
+    activate:
+      on-profile: test                   #@ActiveProfiles로 설정 시 설정파일
+  datasource:
+    url: jdbc:h2:mem:board;mode=mysql    #H2의 호환성 모드 : mysql과 가까운 환경에서 테스트 할 때
 #    driver-class-name: org.h2.Driver
 #  sql:
 #    init:
