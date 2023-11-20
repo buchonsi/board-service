@@ -12,6 +12,15 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace    #query 를 바인딩 파라미터를 보기 위해서
 
 spring:
+  application:
+    name: board-service
+  cloud:
+    vault:
+      scheme: http
+      authentication: token
+      token: ${LOCAL_DEV_VAULT_TOKEN}
+  config:
+    import: vault://
   datasource:
 #    url: jdbc:mysql://localhost:3306/board
 #    username: board
