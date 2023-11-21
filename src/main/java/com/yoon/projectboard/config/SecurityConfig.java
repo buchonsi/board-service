@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 //                        .anyRequest().permitAll())       //모든 요청에 다 오픈
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()       //static resource, css, js등 시큐리티 검사x
+                        .mvcMatchers("/api/**").permitAll()
                         .mvcMatchers(                       //antMatcher와 호환되지만 spring의 패턴 매칭에 들어가는 룰이 추가되서 사용을 권장
                                 HttpMethod.GET,
                                 "/",
@@ -48,6 +49,7 @@ public class SecurityConfig {
                                 .userService(oAuth2UserService)
                         )
                 )
+                .csrf(csrf -> csrf.ignoringAntMatchers("/api/**"))
                 .build();
     }
 
