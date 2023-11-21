@@ -73,6 +73,7 @@
                   th:text="previous"
                   th:href="@{/articles(
                   page=${articles.number -1},
+                  sort=${param.sort},
                   searchType=${param.searchType},
                   searchValue=${param.searchValue}
                   )}"
@@ -83,6 +84,7 @@
                       th:text="${pageNumber + 1}"
                       th:href="@{/articles(
                       page=${pageNumber},
+                      sort=${param.sort},
                       searchType=${param.searchType},
                       searchValue=${param.searchValue}
                       )}"
@@ -93,6 +95,7 @@
                   th:text="next"
                   th:href="@{/articles(
                   page=${articles.number + 1},
+                  sort=${param.sort},
                   searchType=${param.searchType},
                   searchValue=${param.searchValue}
                   )}"
